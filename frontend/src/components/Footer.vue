@@ -1,6 +1,6 @@
 <template>
     <div id="footer">
-        <p>Agendinha &copy; 2023</p>
+        <footer><p>Agendinha &copy; 2023</p></footer>
     </div>
 </template>
   
@@ -11,12 +11,17 @@ export default {
 </script>
 
 <style>
+
+p{
+    margin: 0;
+}
+
 #footer {
-    text-align: center;
     background-color: #25AD86;
     color: #fff;
     text-align: center;
     position: fixed;
+    left: 0;
     bottom: 0;
     width: 100%;
     padding: 4px;

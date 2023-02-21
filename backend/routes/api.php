@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DateTime;
 
 use App\Http\Controllers\ContatoController;
 
@@ -16,8 +17,19 @@ use App\Http\Controllers\ContatoController;
 |
 */
 
-Route::get('HomeView', [ContatoController::class, 'index']);
+/* Contatos */
+Route::get('contatos', [ContatoController::class, 'index']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+/* Criar Contatos */
+Route::POST('/novocontato', [ContatoController::class, 'create'])->name('criar');
+
+/* Atualizar Contatos */
+Route::get('/contato/edit/{id}', [ContatoController::class, 'edit'])->name('editar');
+Route::put('/contato/update/{id}', [ContatoController::class, 'update'])->name('atualizar');
+
+/* Deletar Contatos */
+Route::delete('contato/delete/{id}', [ContatoController::class, 'destroy']);
+
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });

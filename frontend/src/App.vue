@@ -1,16 +1,16 @@
 <template>
-<div>
-  <nav>
-  <Navbar /></nav>
+<div>  
+  <!-- <Navbar /> -->
+  <Agenda />
   <router-view/>
-  <div id="bg" class="bg"></div>
   <Footer />
-  </div>
+  </div> 
 </template>
 
 <script>
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import Agenda from './components/Agenda';
 
 export default {
   data: function() {
@@ -22,12 +22,21 @@ export default {
   name: "App",
   components: {
     Navbar,
+    Agenda,
     Footer
   },
 };
 </script>
 
 <style>
+
+:root{
+  --cor0 : #25AD86; /* Verde Base*/
+  --cor1 : #61115b; /* Roxo Contraste */
+  --cor2 : #e8d09c; /* Bege Fundo */
+  --cor3 : #fff;    /* Branco Fundo */
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -36,21 +45,44 @@ export default {
   color: #2c3e50;
 }
 
-body, html {
-  height: 100%;
+body {
+  /* height: 100%; */
+  background-color: #e8d09c;
+  text-align: center;
 }
 
-.bg {
+button{
+    background-color: var(--cor0);
+    color: var(--cor3);
+    padding: .3rem .6rem;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition-duration: .5s;
+}
+
+button:hover{
+    background-color: var(--cor5);
+    color: var(--cor0);
+}
+
+/* .bg {
   /* The image used */
   /* background-image: url("images/bg.png"); */
 
   /* Full height */
-  height: 100%;
+  /* height: 100%; */
 
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+
+
+/* Centered text */
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 nav {
@@ -59,7 +91,7 @@ nav {
 
 nav a {
   font-weight: bold;
-  color: #25AD86;
+  color: var(--cor0);
 }
 
 nav a:hover {

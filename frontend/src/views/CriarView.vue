@@ -25,3 +25,11 @@
 </div>
     </div>
 </template>
+
+<script>
+import api from '@/services/api.js';
+
+export default {
+  name: 'CriarView'
+}
+</script>

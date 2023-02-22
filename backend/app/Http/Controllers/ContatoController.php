@@ -23,7 +23,7 @@ class ContatoController extends Controller
             $contatos = Contato::all();
         }        
     
-        return view('welcome',['contatos' => $contatos, 'pesquisa' => $pesquisa]);
+        return (['contatos' => $contatos, 'pesquisa' => $pesquisa]);
     }
     
     // Função de mostrar todos
@@ -31,7 +31,7 @@ class ContatoController extends Controller
 
         $contatos = Contato::all();
         
-        return view('welcome');
+        return ($contatos);
     }
 
     // Função de criar um novo contato
@@ -41,31 +41,51 @@ class ContatoController extends Controller
         $contato = new Contato;
 
         // Variaveis para completar
-        $nome = $request->input('nome');
-        $num = $request->input('num');
-        $email = $request->input('email');
+        // $nome = $request->input('nome');
+        // $num = $request->input('num');
+        // $email = $request->input('email');
         
-        // Confere se a data foi preenchida
-        if($nome==null || $num==null || $email==null){
-            return redirect(route('promo.create'))->with('error', 'Promoção incompleta');
+        // // Confere se a data foi preenchida
+        
+        // Pegando os valores
+        $contato->nome = $request->nome;
+        $contato->numero = $request->num;
+        $contato->email = $request->email;
+        $contato->image = $request->image;
+
+        // Image Upload
+        if($request->hasFile('image') && $request->file('image')->isValid()) {
+
+            $requestImage = $request->image;
+
+            $extension = $requestImage->extension();
+
+            $imageName = md5($requestImage->getClientOriginalName() . strtotime("now")) . "." . $extension;
+
+            $requestImage->move(public_path('avatar/avatar'), $imageName);
+
+            $contato->image = $imageName;
         }
 
-        // Pegando os valores
-        $promocoe->nome = $request->nome;
-        $promocoe->descricao = $request->descricao;
-
-        // Salvando a promo no banco
-        $promocoe->save();
-
-        // Feedback de sucesso
-        return redirect(route('admin.painel'))->with('msg', 'Promoção criada com sucesso!');
+        // Salvando o contato no banco
+        $contato->save();
     }
 
-    // Função ver aquele contato
+    // Função ver aquele contato, não implementada
     public function show() {
 
         $contato = Contato::findOrFail($id);
 
+        return ($contato);
+    }
+
+    // Função para abrir a edição
+    public function edit($id) {
+
+        // Procura o id do Contato
+        $contato = Contato::findOrFail($id);
+
+        // Direciona para edição
         return ($contato);
     }
 
@@ -75,10 +95,10 @@ class ContatoController extends Controller
         // Puxa todos os dados do contato em forma de array
         $dados = $request->all();
 
-        if($request->nome==null ||$request->desricao){
-            return redirect(url('contato/edit/' . $request->id ));
+        if($request->nome==null){
+            return redirect(url('contato/editar/' . $request->id ));
         }
-        // Procura o id da promocao e atualiza os dados
+        // Procura o id do contato e atualiza os dados
         Promocoe::findOrFail($request->id)->update($dados);
     }
 
@@ -87,5 +107,7 @@ class ContatoController extends Controller
 
         // Procura o contato pelo ID
         Contato::findOrFail($id)->delete();
+
+        // return ($contatos);
     }
 }

@@ -1,16 +1,12 @@
 <template>
 <div>  
-  <!-- <Navbar /> -->
-  <Agenda />
   <router-view/>
   <Footer />
   </div> 
 </template>
 
 <script>
-import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Agenda from './components/Agenda';
 
 export default {
   data: function() {
@@ -21,8 +17,6 @@ export default {
 
   name: "App",
   components: {
-    Navbar,
-    Agenda,
     Footer
   },
 };
@@ -46,55 +40,39 @@ export default {
 }
 
 body {
-  /* height: 100%; */
-  background-color: #e8d09c;
-  text-align: center;
+  background-image: url(../public/img/bg.jpg);
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
 }
 
-button{
-    background-color: var(--cor0);
-    color: var(--cor3);
-    padding: .3rem .6rem;
-    font-size: 1rem;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition-duration: .5s;
+button, a {
+  background-color: var(--cor0);
+  color: var(--cor3);
+  padding: .3rem .6rem;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition-duration: .5s;
 }
 
-button:hover{
-    background-color: var(--cor5);
-    color: var(--cor0);
-}
-
-/* .bg {
-  /* The image used */
-  /* background-image: url("images/bg.png"); */
-
-  /* Full height */
-  /* height: 100%; */
-
-
-
-/* Centered text */
-.centered {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
+button:hover {
+  background-color: var(--cor5);
   color: var(--cor0);
 }
 
-nav a:hover {
-  color: #61115b;
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .col-25, .col-75, input[type=submit] {
+    width: 100%;
+    margin-top: 0;
+  }
+}
+
+h2 {
+  padding: 0 1rem 1rem;
+  border-bottom: 1px solid var(--cor1);
 }
 </style>

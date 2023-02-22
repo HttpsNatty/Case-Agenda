@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('nome', 40);
-            $table->float('numero', 15);
+            $table->string('numero', 15);
             $table->string('email', 140);
         });
     }

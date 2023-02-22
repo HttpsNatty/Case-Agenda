@@ -18,18 +18,17 @@ use App\Http\Controllers\ContatoController;
 */
 
 /* Contatos */
-Route::get('contatos', [ContatoController::class, 'index']);
+Route::get('/contatos', [ContatoController::class, 'index']);
+
+/* Buscar Contatos */
+Route::get('/contatos/busca', [ContatoController::class, 'search']);
 
 /* Criar Contatos */
 Route::POST('/novocontato', [ContatoController::class, 'create'])->name('criar');
 
 /* Atualizar Contatos */
-Route::get('/contato/edit/{id}', [ContatoController::class, 'edit'])->name('editar');
-Route::put('/contato/update/{id}', [ContatoController::class, 'update'])->name('atualizar');
+Route::get('/contato/editar/{id}', [ContatoController::class, 'edit'])->name('editar');
+Route::put('/update/{id}', [ContatoController::class, 'update'])->name('atualizar');
 
 /* Deletar Contatos */
-Route::delete('contato/delete/{id}', [ContatoController::class, 'destroy']);
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::delete('/contato/delete/{id}', [ContatoController::class, 'destroy']);

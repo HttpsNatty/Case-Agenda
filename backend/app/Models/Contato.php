@@ -14,4 +14,6 @@ class Contato extends Model
         'num',
         'email'
     ];
+
+    
 }

@@ -9,22 +9,23 @@ use App\Models\Contato;
 class ContatoController extends Controller
 {
     // Função de Busca
-    public function search() {
-
+    public function search()
+    {
         $pesquisa = request('pesquisa');
 
-        if($pesquisa) {
-
-            $contatos = Contato::where([
-                ['nome', 'like', '%'.$pesquisa.'%']
-            ])->get();
-
+        if ($pesquisa) {
+            $contatos = Contato::where('nome', 'like', '%' . $pesquisa . '%')
+            ->orWhere('numero', 'like', '%' . $pesquisa . '%')
+            ->orWhere('email', 'like', '%' . $pesquisa . '%')
+            ->get();
         } else {
             $contatos = Contato::all();
-        }        
-    
-        return (['contatos' => $contatos, 'pesquisa' => $pesquisa]);
+        }
+
+        return ['contatos' => $contatos, 'pesquisa' => $pesquisa];
     }
+
+
     
     // Função de mostrar todos
     public function index() {
@@ -72,11 +73,11 @@ class ContatoController extends Controller
     }
 
     // Função ver aquele contato, não implementada
-    public function show() {
-
+    public function show($id)
+    {
         $contato = Contato::findOrFail($id);
 
-        return ($contato);
+        return response()->json($contato);
     }
 
     // Função para abrir a edição
@@ -90,17 +91,25 @@ class ContatoController extends Controller
     }
 
     // Função de atualizar contato
-    public function update(Request $request) {
+    public function update(Request $request, $id)
+    {
+        $contato = Contato::find($id);
 
-        // Puxa todos os dados do contato em forma de array
-        $dados = $request->all();
-
-        if($request->nome==null){
-            return redirect(url('contato/editar/' . $request->id ));
+        if (!$contato) {
+            return response()->json(['message' => 'Contato não encontrado'], 404);
         }
-        // Procura o id do contato e atualiza os dados
-        Promocoe::findOrFail($request->id)->update($dados);
+
+        $dados = $request->only(['nome', 'num', 'email']);
+
+        if ($request->nome == null) {
+            return redirect(url('contato/editar/' . $id));
+        }
+
+        $contato->update($dados);
+
+        return response()->json(['message' => 'Contato atualizado com sucesso']);
     }
+
 
     // Função de excluir contato
     public function destroy($id){

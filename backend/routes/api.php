@@ -28,7 +28,7 @@ Route::POST('/novocontato', [ContatoController::class, 'create'])->name('criar')
 
 /* Atualizar Contatos */
 Route::get('/contato/editar/{id}', [ContatoController::class, 'edit'])->name('editar');
-Route::put('/update/{id}', [ContatoController::class, 'update'])->name('atualizar');
+Route::put('/contato/{id}', [ContatoController::class, 'update'])->name('atualizar');
 
 /* Deletar Contatos */
 Route::delete('/contato/delete/{id}', [ContatoController::class, 'destroy']);

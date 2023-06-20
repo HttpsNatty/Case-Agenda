@@ -9,7 +9,13 @@
     <!-- Foto -->
     <br />
     <label for="foto"><b>Foto</b></label>
-    <input type="file" name="image" id="image" accept="image/png, image/jpeg" @change="onFileSelected" />
+    <input
+      type="file"
+      name="image"
+      id="image"
+      accept="image/png, image/jpeg"
+      @change="onFileSelected"
+    />
     <br />
 
     <!-- Nome -->
@@ -25,14 +31,14 @@
     />
     <br />
 
-    <!-- Numero -->
-    <label for="num"><b>Número</b></label>
+    <!-- numeroero -->
+    <label for="numero"><b>Número</b></label>
     <input
       type="text"
       placeholder="1199832-5555"
-      name="num"
-      id="num"
-      v-model="fd.num"
+      name="numero"
+      id="numero"
+      v-model="fd.numero"
       @input="handleNumericInput"
       required
       maxlength="11"
@@ -51,12 +57,11 @@
     />
     <br />
 
-                <div class="btn-container">
-
-    <router-link to="/">Voltar</router-link>
-    <button type="submit" class="a" v-on:click="criarContato()">
-      Criar Contato
-    </button>
+    <div class="btn-container">
+      <router-link to="/">Voltar</router-link>
+      <button type="submit" class="a" v-on:click="criarContato()">
+        Criar Contato
+      </button>
     </div>
     <!-- </form> -->
   </div>
@@ -74,7 +79,7 @@ export default {
       fd: {
         id: null,
         nome: "",
-        num: "",
+        numero: "",
         email: "",
         image: null,
       },
@@ -93,24 +98,45 @@ export default {
       this.fd.image = event.target.files[0];
     },
     handleNumericInput() {
-      this.fd.num = this.fd.num.replace(/\D/g, "");
+      this.fd.numero = this.fd.numero.replace(/\D/g, "");
     },
 
     criarContato() {
-      // const formdata = new FormData();
-      // formdata.append('image', this.selectedFile, this.selectedFile.name);
-      console.log(this.fd);
-      api
-        .post("api/novocontato", this.fd)
-        .then(() => {
-          console.log("Novo contato adicionado!");
-          this.msg = `Contato adicionado!`;
-          setTimeout(() => (this.msg = ""), 3000);
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-        });
-    },
+  if (this.fd.image) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.fd.image = reader.result; // Armazena a imagem como uma string codificada em base64
+      this.enviarContato(); // Chama a função para enviar o contato para a API
+    };
+    reader.readAsDataURL(this.fd.image); // Lê o conteúdo da imagem como uma string base64
+
+  } else {
+    this.enviarContato(); // Se não houver imagem selecionada, envia o contato sem a imagem
+  }
+},
+
+enviarContato() {
+  const formData = new FormData(); // Crie um objeto FormData para enviar o formulário como dados de formulário multipart
+  formData.append('image', this.fd.image); // Adicione a imagem ao objeto FormData
+
+  // Adicione os outros campos do formulário ao objeto FormData
+  formData.append('nome', this.fd.nome);
+  formData.append('numero', this.fd.numero);
+  formData.append('email', this.fd.email);
+
+  console.log(formData); // Verifique os dados do formulário
+
+  api
+    .post("api/novocontato", formData) // Envie o objeto FormData em vez de this.fd
+    .then(() => {
+      console.log("Novo contato adicionado!");
+      this.msg = `Contato adicionado!`;
+      setTimeout(() => (this.msg = ""), 3000);
+    })
+    .catch((error) => {
+      console.log(error.response.data);
+    });
+}
   },
 };
 </script>

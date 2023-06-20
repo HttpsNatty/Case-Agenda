@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+
 
 use App\Models\Contato;
 
@@ -24,8 +26,6 @@ class ContatoController extends Controller
 
         return ['contatos' => $contatos, 'pesquisa' => $pesquisa];
     }
-
-
     
     // Função de mostrar todos
     public function index() {
@@ -35,42 +35,29 @@ class ContatoController extends Controller
         return ($contatos);
     }
 
-    // Função de criar um novo contato
-    public function create(Request $request) {
-        
+    public function create(Request $request)
+    {
         // Novo Contato
         $contato = new Contato;
 
-        // Variaveis para completar
-        // $nome = $request->input('nome');
-        // $num = $request->input('num');
-        // $email = $request->input('email');
-        
-        // // Confere se a data foi preenchida
-        
-        // Pegando os valores
-        $contato->nome = $request->nome;
-        $contato->numero = $request->num;
-        $contato->email = $request->email;
-        $contato->image = $request->image;
+        // Preenchendo os valores
+        $contato->nome = $request->input('nome');
+        $contato->numero = $request->input('numero');
+        $contato->email = $request->input('email');
 
-        // Image Upload
-        if($request->hasFile('image') && $request->file('image')->isValid()) {
-
-            $requestImage = $request->image;
-
-            $extension = $requestImage->extension();
-
-            $imageName = md5($requestImage->getClientOriginalName() . strtotime("now")) . "." . $extension;
-
-            $requestImage->move(public_path('avatar/avatar'), $imageName);
-
+        // Upload da imagem
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->store('avatar', 'public');
             $contato->image = $imageName;
         }
+
 
         // Salvando o contato no banco
         $contato->save();
     }
+
 
     // Função ver aquele contato, não implementada
     public function show($id)
@@ -99,17 +86,12 @@ class ContatoController extends Controller
             return response()->json(['message' => 'Contato não encontrado'], 404);
         }
 
-        $dados = $request->only(['nome', 'num', 'email']);
-
-        if ($request->nome == null) {
-            return redirect(url('contato/editar/' . $id));
-        }
+        $dados = $request->only(['nome', 'numero', 'email']);
 
         $contato->update($dados);
 
         return response()->json(['message' => 'Contato atualizado com sucesso']);
     }
-
 
     // Função de excluir contato
     public function destroy($id){

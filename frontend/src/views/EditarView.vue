@@ -8,25 +8,31 @@
       <input type="file" name="image" @change="onFileSelected" id="image" />
       <img :src="fd.image" alt="Avatar" class="avatar" />
       <br />
-      <br />
       <label for="nome"><b>Nome</b></label>
       <input type="text" name="nome" v-model="fd.nome" required />
       <br />
-      <label for="num"><b>Número</b></label>
-      <input type="number" name="num" v-model="fd.num" required />
+      <label for="numero"><b>Número</b></label>
+      <input
+        type="text"
+        name="numero"
+        v-model="fd.numero"
+        maxlength="11"
+        required
+      />
       <br />
       <label for="email"><b>E-mail</b></label>
       <input type="email" name="email" v-model="fd.email" />
       <br />
-      <router-link to="/">Voltar</router-link>
-      <br />
-      <router-link
-        to="/"
-        type="submit"
-        class="btn"
-        v-on:click="editarContato(fd.id)"
-        >Salvar Contato</router-link
-      >
+      <div class="btn-container">
+        <router-link to="/">Voltar</router-link>
+        <button
+          to="/"
+          type="submit"
+          class="btn"
+          v-on:click="editarContato(fd.id)"
+          >Salvar Contato</button
+        >
+      </div>
     </div>
   </div>
 </template>
@@ -43,7 +49,7 @@ export default {
       fd: {
         id: null,
         nome: "",
-        num: "",
+        numero: "",
         email: "",
         image: null,
       },
@@ -57,6 +63,12 @@ export default {
     Message,
   },
 
+  watch: {
+  'fd.numero': function(newVal) {
+    this.fd.numero = newVal.replace(/\D/g, "");
+  }
+},
+
   methods: {
     onFileSelected(event) {
       this.selectedFile = event.target.files[0];
@@ -67,23 +79,22 @@ export default {
         .get(`api/contato/editar/${id}`)
         .then((response) => {
           console.log(response.data);
-          this.fd.id = response.data.id;
-          this.fd.nome = response.data.nome;
-          this.fd.num = response.data.num;
-          this.fd.email = response.data.email;
-          this.fd.image = response.data.image;
+          const { id, nome, numero, email, image } = response.data;
+          this.fd = { id, nome, numero, email, image };
         })
         .catch((error) => {
           console.log(error);
         });
     },
+
     editarContato(id) {
       api
-        .put(`api/update/${id}`, this.fd)
+        .put(`api/contato/${id}`, this.fd)
         .then(() => {
-          console.log("Edição do contato!");
+          console.log(this.fd);
           this.msg = `Contato editado!`;
           setTimeout(() => (this.msg = ""), 3000);
+          this.$router.push("/");
         })
         .catch((error) => {
           console.log(error);

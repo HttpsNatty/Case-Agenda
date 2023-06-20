@@ -35,7 +35,8 @@
             >
               <div>
                 <div class="contato">
-                  <img src="/img/eun.jpg" alt="Avatar" class="avatar" />
+                  <img :src="'/avatar' + contato.image" alt="Avatar" class="avatar" />
+                  {{ contato.image }}
                   <div class="contato-info">
                     <h4 style="margin-top: 1; margin-bottom: 0">
                       Nome: {{ contato.nome }}
@@ -48,7 +49,7 @@
                 </div>
                 <div class="btn-container">
                   <router-link
-                    to="/editar"
+                    :to="`/editar/${contato.id}`"
                     class="btn"
                     v-on:click="edicao(contato.id)"
                     >Editar</router-link
@@ -86,6 +87,7 @@ export default {
       pesquisa: null,
       msg: null,
       mostrarMensagemVazia: false,
+      termoPesquisa: null, 
     };
   },
 
@@ -210,8 +212,7 @@ a:hover {
 
 /* Full-width input fields */
 input[type="text"],
-input[type="email"],
-input[type="number"] {
+input[type="email"]{
   width: 100%;
   padding: 15px;
   margin: 5px 0 22px 0;
@@ -221,8 +222,7 @@ input[type="number"] {
 }
 
 input[type="text"]:focus,
-input[type="email"],
-input[type="number"]:focus {
+input[type="email"]:focus {
   background-color: #ddd;
   outline: none;
   border-radius: 5px;
